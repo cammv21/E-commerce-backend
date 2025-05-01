@@ -8,7 +8,8 @@ import { UserMongoRepository } from './user-mongo.repository';
 import { USER_REPOSITORY } from './users.repository';
 
 @Module({
-  imports: [MongooseModule.forFeature([
+  imports: [
+    MongooseModule.forFeature([
     { name: User.name, schema: UserSchema}
   ])],
   controllers: [UsersController],
@@ -19,5 +20,8 @@ import { USER_REPOSITORY } from './users.repository';
       useClass: UserMongoRepository,
     }
   ],
+  exports: [
+    UserService,
+  ]
 })
 export class UserModule {}

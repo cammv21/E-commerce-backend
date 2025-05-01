@@ -9,6 +9,7 @@ import { ProductModule } from './app/product/product.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configOptions } from './app/config/config-options';
+import { RolesModule } from './app/roles/roles.module';
 
 
 @Module({
@@ -29,6 +30,7 @@ import { configOptions } from './app/config/config-options';
         };
       }
     }),
+    RolesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

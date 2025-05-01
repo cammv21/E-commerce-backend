@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { USER_REPOSITORY, UserRepository } from './users.repository';
@@ -11,6 +12,10 @@ export class UserService {
     @Inject(USER_REPOSITORY) private readonly userRepository: UserRepository,
   ) {}
 
+  comparePassword( password: string, hashedPassword: string): Promise<boolean> {
+    return bcrypt.compare(password, hashedPassword);
+  }
+
 
   findAll() {
     return `This action returns all user`;
@@ -20,7 +25,15 @@ export class UserService {
     return `This action returns a #${id} user`;
   }
 
+  async findByEmail(email: string) {
+    return await this.userRepository.findByEmail(email);
+  }
+
   async create(createUserDto: CreateUserDto) {
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(createUserDto.password, salt);
+    createUserDto.password = hashedPassword;
+    console.log("createUserDto", createUserDto);
     return await this.userRepository.createUser(createUserDto);
   }
 

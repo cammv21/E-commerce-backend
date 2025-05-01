@@ -1,42 +1,37 @@
 import {
   Controller,
-  Get,
   Post,
   Body,
-  Patch,
-  Param,
-  Delete,
+  HttpCode,
+  Get,
+  UseGuards,
+  Request,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+
+import { PassportLocalGuard } from './guards/passport-local.guard';
+import { Permissions } from '../decorators/permissions.decorator';
+import { Resources } from '../roles/enums/resource.enum';
+import { Actions } from '../roles/enums/actions.enum';
+import { PassportJwtAuthGuard } from './guards/passport-jwt.guard';
+
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post()
-  create(@Body() createAuthDto: CreateAuthDto) {
-    return this.authService.create(createAuthDto);
+  @HttpCode(200)
+  @Post('login')
+  @UseGuards(PassportLocalGuard)
+  async login(@Request() req) {
+    return this.authService.signIn(req.user);
   }
 
-  @Get()
-  findAll() {
-    return this.authService.findAll();
+  // @Permissions([{resource: Resources.user, actions: [Actions.read]}])
+  @Get('me')
+  @UseGuards(PassportJwtAuthGuard)
+  getUserInfo(@Request() req) {
+    return req.user;
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.authService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
-    return this.authService.update(+id, updateAuthDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.authService.remove(+id);
-  }
 }

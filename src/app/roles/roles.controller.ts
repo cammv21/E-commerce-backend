@@ -7,8 +7,19 @@ import { UpdateRoleDto } from './dto/update-role.dto';
 export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 
+  @Get()
+  findAll() {
+    return this.rolesService.findAll();
+  }
+
+  @Get(':id')
+  getById(@Param('id') id: string) {
+    return this.rolesService.getById(id);
+  }
+  
   @Post()
   createRole(@Body() createRoleDto: CreateRoleDto) {
     return this.rolesService.createRole(createRoleDto);
   }
+
 }

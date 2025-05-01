@@ -8,8 +8,8 @@ class Permission {
     @Prop({ required: true, enum: Resources })
     resource: Resources;
 
-    @Prop({ required: true, enum: Actions })
-    description: Actions;
+    @Prop({ required: true, enum: Actions, type: [String] })
+    actions: Actions[];
 }
 
 @Schema()

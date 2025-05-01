@@ -13,6 +13,16 @@ export class UserMongoRepository implements UserRepository{
         const users = await this.userModel.find().exec();
         return users.map((user) => this.mapToUser(user));
     }
+
+    async findById(id: string): Promise<User> {
+        const user = await this.userModel
+            .findById(id)
+            .exec();
+        if (!user) {
+            return null;
+        }
+        return this.mapToUser(user);
+    }
     
     async findByEmail(email: string): Promise<User> {
         const user = await this.userModel
@@ -36,6 +46,7 @@ export class UserMongoRepository implements UserRepository{
         user.email = rawUser.email;
         user.name = rawUser.name;
         user.password = rawUser.password;
+        user.roleId = rawUser.roleId.toString();
         user.createdAt = rawUser.createdAt;
         user.updatedAt = rawUser.updatedAt;
     

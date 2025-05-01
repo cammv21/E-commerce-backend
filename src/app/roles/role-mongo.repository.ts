@@ -36,11 +36,11 @@ export class RoleMongoRepository implements RoleRepository {
 
             role.id = rawUser.id;
             role.name = rawUser.name;
-            role.permissions = rawUser.permissions;
+            role.permissions = rawUser.permissions;         
             role.createdAt = rawUser.createdAt;
             role.updatedAt = rawUser.updatedAt;
 
-            return role;
+            return role; 
         }
     
 }

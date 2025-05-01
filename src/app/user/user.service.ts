@@ -16,13 +16,12 @@ export class UserService {
     return bcrypt.compare(password, hashedPassword);
   }
 
-
-  findAll() {
-    return `This action returns all user`;
+  async findAll() {
+    return this.userRepository.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findById(id: string) {
+    return this.userRepository.findById(id);
   }
 
   async findByEmail(email: string) {

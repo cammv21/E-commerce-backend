@@ -1,6 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
+import { RolesService } from '../roles/roles.service';
 
 type AuthInput = {
   email: string;
@@ -25,6 +26,7 @@ export class AuthService {
 
   constructor(
     private userService: UserService,
+    private roleService: RolesService, // Assuming you have a RoleService for role management
     private readonly jwtService: JwtService, // Assuming you have a JwtService for token generation
 
   ) {}
@@ -80,6 +82,25 @@ export class AuthService {
       },
       accessToken,
     };
+  }
+
+  async getUserPermissions(userId: string) {
+    const user = await this.userService.findById(userId);
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+    const permissions = await this.roleService.getById(user.roleId);
+    if (!permissions) {
+      throw new UnauthorizedException('Role not found');
+    }
+
+    return permissions.permissions.map((permission) => {
+      return {
+        resource: permission.resource,
+        actions: permission.actions,
+      };
+    });
+
   }
 
   

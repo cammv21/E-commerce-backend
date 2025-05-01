@@ -22,5 +22,8 @@ import { RoleMongoRepository } from './role-mongo.repository';
       }
     ],
   controllers: [RolesController],
+  exports: [
+    RolesService,
+  ],
 })
 export class RolesModule {}

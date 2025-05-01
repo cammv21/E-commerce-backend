@@ -4,6 +4,8 @@ import { User } from "./entities/user.entity";
 export const USER_REPOSITORY = "UserRepository";
 
 export interface UserRepository {
-    createUser(user: CreateUserDto): Promise<User>;
+    findAll(): Promise<User[]>;
+    findById(id: string): Promise<User>;
     findByEmail(email: string): Promise<User>;
+    createUser(user: CreateUserDto): Promise<User>;
 }
